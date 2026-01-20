@@ -10,7 +10,6 @@ namespace BulkyWeb.Data
         {
             
         }
-
         public DbSet<Category> MyProperty { get; set; }
         // 這個是用來對應 Category 這個 Model 的資料表，且會自動建立資料表
     }
