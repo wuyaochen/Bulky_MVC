@@ -20,5 +20,16 @@ namespace BulkyWeb.Controllers
         {
             return View();
         }
+        [HttpPost]
+        public IActionResult Create(Category obj)
+        {
+            if (ModelState.IsValid)
+            {
+                _db.Categories.Add(obj); //表單按下送出後，將資料加入資料庫
+                _db.SaveChanges(); //save changes to database
+                return RedirectToAction("Index");
+            }
+            return View();
+        }
     }
 }
