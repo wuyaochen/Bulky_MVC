@@ -31,6 +31,7 @@ namespace BulkyWeb.Controllers
             {
                 _db.Categories.Add(obj); //表單按下送出後，將資料加入資料庫
                 _db.SaveChanges(); //save changes to database
+                TempData["success"] = "Category created successfully"; //記錄這個動作成功
                 return RedirectToAction("Index");
             }
             return View();
@@ -58,6 +59,7 @@ namespace BulkyWeb.Controllers
             {
                 _db.Categories.Update(obj); //表單按下送出後，將資料加入資料庫
                 _db.SaveChanges(); //save changes to database
+                TempData["success"] = "Category updated successfully";
                 return RedirectToAction("Index");
             }
             return View();
@@ -87,6 +89,7 @@ namespace BulkyWeb.Controllers
             }
             _db.Categories.Remove(obj);
             _db.SaveChanges(); //save changes to database
+            TempData["success"] = "Category deleted successfully";
             return RedirectToAction("Index");
         }
     }
