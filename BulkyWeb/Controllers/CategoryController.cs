@@ -23,10 +23,10 @@ namespace BulkyWeb.Controllers
         [HttpPost]
         public IActionResult Create(Category obj)
         {
-            //if (obj.Name == obj.DisplayOrder.ToString())
-            //{
-            //    ModelState.AddModelError("name", "The DisplayOrder cannot exactly match the Name.");
-            //}
+            if (obj.Name == obj.DisplayOrder.ToString())
+            {
+                ModelState.AddModelError("name", "The DisplayOrder cannot exactly match the Name.");
+            }
             if (ModelState.IsValid)
             {
                 _db.Categories.Add(obj); //表單按下送出後，將資料加入資料庫
@@ -54,13 +54,9 @@ namespace BulkyWeb.Controllers
         [HttpPost]
         public IActionResult Edit(Category obj)
         {
-            //if (obj.Name == obj.DisplayOrder.ToString())
-            //{
-            //    ModelState.AddModelError("name", "The DisplayOrder cannot exactly match the Name.");
-            //}
             if (ModelState.IsValid)
             {
-                _db.Categories.Add(obj); //表單按下送出後，將資料加入資料庫
+                _db.Categories.Update(obj); //表單按下送出後，將資料加入資料庫
                 _db.SaveChanges(); //save changes to database
                 return RedirectToAction("Index");
             }
