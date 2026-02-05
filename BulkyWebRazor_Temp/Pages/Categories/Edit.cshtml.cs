@@ -27,7 +27,7 @@ namespace BulkyWebRazor_Temp.Pages.Categories
             {
                 _db.Categories.Update(Category); //表單按下送出後，將資料加入資料庫
                 _db.SaveChanges(); //save changes to database
-                // TempData["success"] = "Category updated successfully";
+                TempData["success"] = "Category updated successfully";
                 return RedirectToPage("Index");
             }
             return Page();
