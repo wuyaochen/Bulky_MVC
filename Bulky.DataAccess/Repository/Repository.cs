@@ -13,7 +13,8 @@ namespace Bulky.DataAccess.Repository
     public class Repository<T> : IRepository<T> where T : class
     {
         private readonly ApplicationDbContext _db;
-        internal DbSet<T> dbSet; // define T, so dbSet will become Category table in database
+        internal DbSet<T> dbSet; 
+        // define T, so dbSet will become Category table in database
         public Repository(ApplicationDbContext db)
         {
             _db = db;
