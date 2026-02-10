@@ -11,9 +11,11 @@ namespace BulkyWeb.Areas.Admin.Controllers
     public class ProductController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
-        public ProductController(IUnitOfWork unitOfWork) 
+        private readonly IWebHostEnvironment _webhostEnvironment;
+        public ProductController(IUnitOfWork unitOfWork, IWebHostEnvironment webHostEnvironment)
         {
             _unitOfWork = unitOfWork;
+            _webhostEnvironment = webHostEnvironment;
         }
         public IActionResult Index()
         {
@@ -49,6 +51,19 @@ namespace BulkyWeb.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
+                string wwwRootPath = _webhostEnvironment.WebRootPath;
+                if (file != null)
+                {
+                    string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName); //產生一個獨特的檔案名稱
+                    var productPath = Path.Combine(wwwRootPath, @"images\product"); //設定上傳路徑
+
+                    using (var fileStream = new FileStream(Path.Combine(productPath, fileName), FileMode.Create)) //建立一個新的檔案流，準備將新圖片寫入
+                    {
+                        file.CopyTo(fileStream); //將新圖片上傳到指定路徑
+                    }
+                    productVM.Product.ImageUrl = @"\images\product\" + fileName; //更新產品的圖片URL
+                }
+
                 _unitOfWork.Product.Add(productVM.Product); //表單按下送出後，將資料加入資料庫
                 _unitOfWork.Save(); //save changes to database
                 TempData["success"] = "Product created successfully"; //記錄這個動作成功
