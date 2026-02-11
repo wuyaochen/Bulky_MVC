@@ -14,6 +14,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\images\product\5604a678-b99f-43e8-9216-7db9b9b3a80c.jpg" />
+    <Content Remove="wwwroot\images\product\5782dc80-80a5-4feb-9a74-a55693e3023b.jpg" />
+    <Content Remove="wwwroot\images\product\6897e755-2552-4f66-bf85-d4354976844d.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.0">

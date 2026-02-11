@@ -20,23 +20,40 @@ namespace Bulky.DataAccess.Repository
             _db = db;
             this.dbSet = _db.Set<T>(); 
             // _db.Categories == dbSet
+            _db.Products.Include(u => u.Category).Include(u => u.CategoryId); // eager loading, so that when we get product, we can also get category information
         }
         public void Add(T entity)
         {
             _db.Add(entity);
         }
 
-        public T Get(Expression<Func<T, bool>> filter)
+        public T Get(Expression<Func<T, bool>> filter, string? IncludeProperties = null)
         {
             IQueryable<T> query = dbSet;
             query = query.Where(filter);
+            if (!string.IsNullOrEmpty(IncludeProperties))
+            {
+                foreach (var includeProp in IncludeProperties
+                    .Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(includeProp);
+                }
+            }
             return query.FirstOrDefault();
             // equal to Category.Controller (Category? categoryFromDb1 = _db.Categories.FirstOrDefault(u=>u.Id==id);)
         }
 
-        public IEnumerable<T> GetAll()
+        public IEnumerable<T> GetAll(string? IncludeProperties = null)
         {
             IQueryable<T> query = dbSet;
+            if (!string.IsNullOrEmpty(IncludeProperties))
+            {
+                foreach (var includeProp in IncludeProperties
+                    .Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(includeProp);
+                }
+            }
             return query.ToList();
         }
 

@@ -19,7 +19,7 @@ namespace BulkyWeb.Areas.Admin.Controllers
         }
         public IActionResult Index()
         {
-            List<Product> objProductList = _unitOfWork.Product.GetAll().ToList();
+            List<Product> objProductList = _unitOfWork.Product.GetAll(IncludeProperties:"Category").ToList();
 
             return View(objProductList);
         }
@@ -57,6 +57,18 @@ namespace BulkyWeb.Areas.Admin.Controllers
                     string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName); //產生一個獨特的檔案名稱
                     var productPath = Path.Combine(wwwRootPath, @"images\product"); //設定上傳路徑
 
+                    if (!string.IsNullOrEmpty(productVM.Product.ImageUrl)) //如果產品已經有圖片了，刪除舊圖片
+                    {
+                        // delete old image
+                        var oldImagePath = 
+                            Path.Combine(wwwRootPath, productVM.Product.ImageUrl.TrimStart('\\')); //取得舊圖片的完整路徑
+                        if (System.IO.File.Exists(oldImagePath)) //如果舊圖片存在，刪除它
+                        {
+                            System.IO.File.Delete(oldImagePath);
+                        }
+                    }
+
+
                     using (var fileStream = new FileStream(Path.Combine(productPath, fileName), FileMode.Create)) //建立一個新的檔案流，準備將新圖片寫入
                     {
                         file.CopyTo(fileStream); //將新圖片上傳到指定路徑
@@ -64,7 +76,15 @@ namespace BulkyWeb.Areas.Admin.Controllers
                     productVM.Product.ImageUrl = @"\images\product\" + fileName; //更新產品的圖片URL
                 }
 
-                _unitOfWork.Product.Add(productVM.Product); //表單按下送出後，將資料加入資料庫
+                if (productVM.Product.Id == 0)
+                {
+                    _unitOfWork.Product.Add(productVM.Product); //表單按下送出後，將資料加入資料庫
+                }
+                else
+                {
+                    _unitOfWork.Product.Update(productVM.Product); 
+                }
+
                 _unitOfWork.Save(); //save changes to database
                 TempData["success"] = "Product created successfully"; //記錄這個動作成功
                 return RedirectToAction("Index");
