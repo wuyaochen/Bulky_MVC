@@ -27,13 +27,13 @@ namespace Bulky.DataAccess.Repository
             _db.Add(entity);
         }
 
-        public T Get(Expression<Func<T, bool>> filter, string? IncludeProperties = null)
+        public T Get(Expression<Func<T, bool>> filter, string? includeProperties = null)
         {
             IQueryable<T> query = dbSet;
             query = query.Where(filter);
-            if (!string.IsNullOrEmpty(IncludeProperties))
+            if (!string.IsNullOrEmpty(includeProperties))
             {
-                foreach (var includeProp in IncludeProperties
+                foreach (var includeProp in includeProperties
                     .Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
                 {
                     query = query.Include(includeProp);
