@@ -2,6 +2,7 @@ using Bulky.DataAccess.Data;
 using Bulky.DataAccess.Repository;
 using Bulky.DataAccess.Repository.IRepositor;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,8 +11,10 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// ³o¸Ì´N¬Oµù¥U Repository ªº¦a¤è
-// AddScoped ·N¨ýµÛ¦b¦P¤@­Ó HTTP Request ¤¤·|¦@¥Î¦P¤@­Ó¹êÅé
+builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ApplicationDbContext>();
+
+// ï¿½oï¿½Ì´Nï¿½Oï¿½ï¿½ï¿½U Repository ï¿½ï¿½ï¿½aï¿½ï¿½
+// AddScoped ï¿½Nï¿½ï¿½ï¿½Û¦bï¿½Pï¿½@ï¿½ï¿½ HTTP Request ï¿½ï¿½ï¿½|ï¿½@ï¿½Î¦Pï¿½@ï¿½Ó¹ï¿½ï¿½ï¿½
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 var app = builder.Build();

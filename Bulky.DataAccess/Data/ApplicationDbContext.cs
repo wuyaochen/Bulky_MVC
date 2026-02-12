@@ -1,9 +1,10 @@
 ﻿using Bulky.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Bulky.DataAccess.Data
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext
     {
         // 配置基本架構，並且繼承自 Entity Framework 的 DbContext
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
@@ -15,6 +16,9 @@ namespace Bulky.DataAccess.Data
         // 這個是用來對應 Category 這個 Model 的資料表，且會自動建立資料表
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // if using Identity, we need to call the base OnModelCreating method
+            base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<Category>().HasData(
                 new Category { Id = 1, Name = "Action", DisplayOrder = 1 },
                 new Category { Id = 2, Name = "SciFi", DisplayOrder = 2 },
