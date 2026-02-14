@@ -14,6 +14,13 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    // 這裡是設定 Identity 的 Cookie 路徑，當使用者需要登入、登出或是存取被拒絕的頁面時，會導向這些路徑
+    options.LoginPath = $"/Identity/Account/Login";
+    options.LogoutPath = $"/Identity/Account/Logout";
+    options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
+});
 // identity defalt uses razor page
 builder.Services.AddRazorPages();
 // 這裡就是註冊 Repository 的地方

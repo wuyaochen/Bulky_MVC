@@ -1,11 +1,14 @@
-ï»¿using Bulky.DataAccess.Data;
+using Bulky.DataAccess.Data;
 using Bulky.DataAccess.Repository.IRepositor;
 using Bulky.Models;
+using Bulky.Utility;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BulkyWeb.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = SD.Role_Admin)]
     public class CategoryController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -31,9 +34,9 @@ namespace BulkyWeb.Areas.Admin.Controllers
             }
             if (ModelState.IsValid)
             {
-                _unitOfWork.Category.Add(obj); //è¡¨å–®æŒ‰ä¸‹é€å‡ºå¾Œï¼Œå°‡è³‡æ–™åŠ å…¥è³‡æ–™åº«
+                _unitOfWork.Category.Add(obj); //ªí³æ«ö¤U°e¥X«á¡A±N¸ê®Æ¥[¤J¸ê®Æ®w
                 _unitOfWork.Save(); //save changes to database
-                TempData["success"] = "Category created successfully"; //è¨˜éŒ„é€™å€‹å‹•ä½œæˆåŠŸ
+                TempData["success"] = "Category created successfully"; //°O¿ı³o­Ó°Ê§@¦¨¥\
                 return RedirectToAction("Index");
             }
             return View();
@@ -59,7 +62,7 @@ namespace BulkyWeb.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                _unitOfWork.Category.Update(obj); //è¡¨å–®æŒ‰ä¸‹é€å‡ºå¾Œï¼Œå°‡è³‡æ–™åŠ å…¥è³‡æ–™åº«
+                _unitOfWork.Category.Update(obj); //ªí³æ«ö¤U°e¥X«á¡A±N¸ê®Æ¥[¤J¸ê®Æ®w
                 _unitOfWork.Save(); //save changes to database
                 TempData["success"] = "Category updated successfully";
                 return RedirectToAction("Index");
