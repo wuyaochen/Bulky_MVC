@@ -11,10 +11,11 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ApplicationDbContext>();
-
-// 嚙緻嚙諒就嚙瞌嚙踝蕭嚙磊 Repository 嚙踝蕭嚙窮嚙踝蕭
-// AddScoped 嚙瞇嚙踝蕭嚙諛在嚙瞑嚙瑾嚙踝蕭 HTTP Request 嚙踝蕭嚙罵嚙瑾嚙諄同嚙瑾嚙諉對蕭嚙踝蕭
+builder.Services.AddDefaultIdentity<IdentityUser>().AddEntityFrameworkStores<ApplicationDbContext>();
+// identity defalt uses razor page
+builder.Services.AddRazorPages();
+// 這裡就是註冊 Repository 的地方
+// AddScoped 代表在同一個 HTTP Request 中會使用同一個實例
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 var app = builder.Build();
@@ -31,9 +32,10 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
-app.UseAuthorization();
-
+app.UseAuthentication();
+//after user authentication, we need to authorize
+app.UseAuthorization(); 
+app.MapRazorPages(); // 這裡是用來對應 Razor Page 的路由
 app.MapControllerRoute(
     name: "default",
     pattern: "{area=Customer}/{controller=Home}/{action=Index}/{id?}");

@@ -1,19 +1,20 @@
-ï»¿using Bulky.Models;
+using Bulky.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Bulky.DataAccess.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext<IdentityUser>
     {
-        // é…ç½®åŸºæœ¬æ¶æ§‹ï¼Œä¸¦ä¸”ç¹¼æ‰¿è‡ª Entity Framework çš„ DbContext
+        // °t¸m°ò¥»¬[ºc¡A¨Ã¥BÄ~©Ó¦Û Entity Framework ªº DbContext
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
             
         }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Product> Products { get; set; }
-        // é€™å€‹æ˜¯ç”¨ä¾†å°æ‡‰ Category é€™å€‹ Model çš„è³‡æ–™è¡¨ï¼Œä¸”æœƒè‡ªå‹•å»ºç«‹è³‡æ–™è¡¨
+        // ³o­Ó¬O¥Î¨Ó¹ïÀ³ Category ³o­Ó Model ªº¸ê®Æªí¡A¥B·|¦Û°Ê«Ø¥ß¸ê®Æªí
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // if using Identity, we need to call the base OnModelCreating method
