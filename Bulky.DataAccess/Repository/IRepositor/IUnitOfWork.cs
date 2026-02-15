@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +10,7 @@ namespace Bulky.DataAccess.Repository.IRepositor
     {
         ICategoryRepository Category { get; }
         IProductRepository Product { get; }
+        ICompanyRepository Company { get; }
         void Save();
     }
 }

@@ -14,6 +14,7 @@ namespace Bulky.DataAccess.Data
         }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Product> Products { get; set; }
+        public DbSet<Company> Companies { get; set; }
         // 這個是用來對應 Category 這個 Model 的資料表，且會自動建立資料表
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
