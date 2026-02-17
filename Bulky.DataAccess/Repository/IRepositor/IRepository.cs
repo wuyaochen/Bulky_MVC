@@ -11,8 +11,9 @@ namespace Bulky.DataAccess.Repository.IRepositor
     {
         // T - Category
         IEnumerable<T> GetAll(string? includeProperties = null);
-        T Get(Expression<Func<T, bool>> filter, string? includeProperties = null); 
+        T Get(Expression<Func<T, bool>> filter, string? includeProperties = null, bool tracked = false); 
         // get single object based on some filter
+        // tracked = false let Db change when we use update
         void Add(T entity);
         void Remove(T entity);
         void RemoveRange(IEnumerable<T> entity);
