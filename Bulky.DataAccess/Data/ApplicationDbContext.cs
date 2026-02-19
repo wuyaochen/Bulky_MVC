@@ -18,6 +18,8 @@ namespace Bulky.DataAccess.Data
         public DbSet<ShoppingCart> ShoppingCarts { get; set; }
         // 這個是用來對應 Category 這個 Model 的資料表，且會自動建立資料表
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+        public DbSet<OrderHead> OrderHeads { get; set; }
+        public DbSet<OrderDetail> OrderDetails { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // if using Identity, we need to call the base OnModelCreating method
