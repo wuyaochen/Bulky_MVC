@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Bulky.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260219145026_addOrderHeaderAndDetailsToDb")]
+    [Migration("20260219150513_addOrderHeaderAndDetailsToDb")]
     partial class addOrderHeaderAndDetailsToDb
     {
         /// <inheritdoc />
@@ -141,7 +141,7 @@ namespace Bulky.DataAccess.Migrations
                     b.Property<int>("Count")
                         .HasColumnType("int");
 
-                    b.Property<int>("OrderHeadId")
+                    b.Property<int>("OrderHeaderId")
                         .HasColumnType("int");
 
                     b.Property<double>("Price")
@@ -152,14 +152,14 @@ namespace Bulky.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OrderHeadId");
+                    b.HasIndex("OrderHeaderId");
 
                     b.HasIndex("ProductId");
 
                     b.ToTable("OrderDetails");
                 });
 
-            modelBuilder.Entity("Bulky.Models.OrderHead", b =>
+            modelBuilder.Entity("Bulky.Models.OrderHeader", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -229,7 +229,7 @@ namespace Bulky.DataAccess.Migrations
 
                     b.HasIndex("ApplicationUserId");
 
-                    b.ToTable("OrderHeads");
+                    b.ToTable("OrderHeaders");
                 });
 
             modelBuilder.Entity("Bulky.Models.Product", b =>
@@ -632,9 +632,9 @@ namespace Bulky.DataAccess.Migrations
 
             modelBuilder.Entity("Bulky.Models.OrderDetail", b =>
                 {
-                    b.HasOne("Bulky.Models.OrderHead", "OrderHead")
+                    b.HasOne("Bulky.Models.OrderHeader", "OrderHeader")
                         .WithMany()
-                        .HasForeignKey("OrderHeadId")
+                        .HasForeignKey("OrderHeaderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -644,12 +644,12 @@ namespace Bulky.DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("OrderHead");
+                    b.Navigation("OrderHeader");
 
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("Bulky.Models.OrderHead", b =>
+            modelBuilder.Entity("Bulky.Models.OrderHeader", b =>
                 {
                     b.HasOne("Bulky.Models.ApplicationUser", "ApplicationUser")
                         .WithMany()

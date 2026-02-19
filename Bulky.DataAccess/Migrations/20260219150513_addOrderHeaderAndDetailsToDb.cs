@@ -12,7 +12,7 @@ namespace Bulky.DataAccess.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "OrderHeads",
+                name: "OrderHeaders",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -37,9 +37,9 @@ namespace Bulky.DataAccess.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_OrderHeads", x => x.Id);
+                    table.PrimaryKey("PK_OrderHeaders", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_OrderHeads_AspNetUsers_ApplicationUserId",
+                        name: "FK_OrderHeaders_AspNetUsers_ApplicationUserId",
                         column: x => x.ApplicationUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
@@ -52,7 +52,7 @@ namespace Bulky.DataAccess.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    OrderHeadId = table.Column<int>(type: "int", nullable: false),
+                    OrderHeaderId = table.Column<int>(type: "int", nullable: false),
                     ProductId = table.Column<int>(type: "int", nullable: false),
                     Count = table.Column<int>(type: "int", nullable: false),
                     Price = table.Column<double>(type: "float", nullable: false)
@@ -61,9 +61,9 @@ namespace Bulky.DataAccess.Migrations
                 {
                     table.PrimaryKey("PK_OrderDetails", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_OrderDetails_OrderHeads_OrderHeadId",
-                        column: x => x.OrderHeadId,
-                        principalTable: "OrderHeads",
+                        name: "FK_OrderDetails_OrderHeaders_OrderHeaderId",
+                        column: x => x.OrderHeaderId,
+                        principalTable: "OrderHeaders",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -75,9 +75,9 @@ namespace Bulky.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrderDetails_OrderHeadId",
+                name: "IX_OrderDetails_OrderHeaderId",
                 table: "OrderDetails",
-                column: "OrderHeadId");
+                column: "OrderHeaderId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_OrderDetails_ProductId",
@@ -85,8 +85,8 @@ namespace Bulky.DataAccess.Migrations
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrderHeads_ApplicationUserId",
-                table: "OrderHeads",
+                name: "IX_OrderHeaders_ApplicationUserId",
+                table: "OrderHeaders",
                 column: "ApplicationUserId");
         }
 
@@ -97,7 +97,7 @@ namespace Bulky.DataAccess.Migrations
                 name: "OrderDetails");
 
             migrationBuilder.DropTable(
-                name: "OrderHeads");
+                name: "OrderHeaders");
         }
     }
 }
