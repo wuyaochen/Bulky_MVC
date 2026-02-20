@@ -12,5 +12,7 @@ namespace Bulky.DataAccess.Repository.IRepositor
         void Update(OrderHeader obj); 
         // This method is specific to the Category repository.
         // it may have additional logic for updating a category.
+        void UpdateStatus(int id, string orderStatus, string? paymentStatus = null);
+        void UpdateStripePaymentId(int id, string sessionId, string paymentIntentId);
     }
 }
