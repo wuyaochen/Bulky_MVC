@@ -4,7 +4,7 @@ $(document).ready(function () {
     loadDataTable();
 });
 
-document.addEventListener('DOMContentLoaded', function () {
+function loadDataTable() {
     dataTable = $('#tblData').DataTable({
         "ajax": {
             url: '/admin/product/getall'
@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         ]
     });
-});
+};
 
 function Delete(url) {
     Swal.fire({
