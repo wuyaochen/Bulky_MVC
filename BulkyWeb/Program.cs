@@ -24,6 +24,15 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.LogoutPath = $"/Identity/Account/Logout";
     options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
 });
+
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(100); // 設定 Session 的過期時間
+    options.Cookie.HttpOnly = true; // 設定 Cookie 為 HttpOnly，增加安全性
+    options.Cookie.IsEssential = true; // 設定 Cookie 為必要，確保在使用者同意前也能使用 Session
+});
+
 // identity defalt uses razor page
 builder.Services.AddRazorPages();
 // 這裡就是註冊 Repository 的地方
@@ -48,6 +57,7 @@ app.UseRouting();
 app.UseAuthentication();
 //after user authentication, we need to authorize
 app.UseAuthorization(); 
+app.UseSession(); // 這裡是啟用 Session 的中介軟體，必須在 UseRouting 和 UseEndpoints 之間呼叫
 app.MapRazorPages(); // 這裡是用來對應 Razor Page 的路由
 app.MapControllerRoute(
     name: "default",
