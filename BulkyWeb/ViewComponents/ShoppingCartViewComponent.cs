@@ -1,4 +1,5 @@
-﻿using Bulky.Utility;
+﻿using Bulky.DataAccess.Repository.IRepositor;
+using Bulky.Utility;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
