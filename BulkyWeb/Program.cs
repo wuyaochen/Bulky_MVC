@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Bulky.Utility;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Stripe;
+using Bulky.DataAccess.DbInitializer;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,6 +39,7 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true; // 設定 Cookie 為必要，確保在使用者同意前也能使用 Session
 });
 
+builder.Services.AddScoped<IDbInitializer, DbInitializer>();
 // identity defalt uses razor page
 builder.Services.AddRazorPages();
 // 這裡就是註冊 Repository 的地方
@@ -63,9 +65,19 @@ app.UseAuthentication();
 //after user authentication, we need to authorize
 app.UseAuthorization(); 
 app.UseSession(); // 這裡是啟用 Session 的中介軟體，必須在 UseRouting 和 UseEndpoints 之間呼叫
+SeedDatabase(); // 這裡是呼叫 SeedDatabase 方法來初始化資料庫，確保在應用程式啟動時就有必要的資料
 app.MapRazorPages(); // 這裡是用來對應 Razor Page 的路由
 app.MapControllerRoute(
     name: "default",
     pattern: "{area=Customer}/{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
+
+void SeedDatabase()
+{
+    using (var scope = app.Services.CreateScope())
+    {
+        var dbInitializer = scope.ServiceProvider.GetRequiredService<IDbInitializer>();
+        dbInitializer.Initialize();
+    }
+}
