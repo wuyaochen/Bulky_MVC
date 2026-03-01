@@ -68,7 +68,7 @@ namespace BulkyWeb.Areas.Admin.Controllers
             }
             _db.SaveChanges();
 
-            return Json(new { success = true, message = "Delete successful" });
+            return Json(new { success = true, message = "Operation successful" });
         }
         #endregion
     }
