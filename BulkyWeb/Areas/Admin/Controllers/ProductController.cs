@@ -45,7 +45,8 @@ namespace BulkyWeb.Areas.Admin.Controllers
             else
             {
                 //update product
-                productVM.Product = _unitOfWork.Product.Get(u => u.Id == id);
+                //includeProperties: "ProductImages" 要跟Database裡的ProductImages屬性名稱一樣，才能把圖片資料一起載入
+                productVM.Product = _unitOfWork.Product.Get(u => u.Id == id, includeProperties: "ProductImages");
                 return View(productVM);
             }
         }
