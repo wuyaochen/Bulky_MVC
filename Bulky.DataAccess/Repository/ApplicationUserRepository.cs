@@ -21,5 +21,9 @@ namespace Bulky.DataAccess.Repository
             // and dbSet will become Category table in database
             _db = db;
         }
+        public void Update(ApplicationUser applicationUser)
+        {
+            _db.ApplicationUsers.Update(applicationUser);
+        }
     }
 }
