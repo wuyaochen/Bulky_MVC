@@ -119,6 +119,29 @@ namespace BulkyWeb.Areas.Admin.Controllers
             }
 
         }
+        public IActionResult DeleteImage(int imageId)
+        {
+            var imageToBeDeleted = _unitOfWork.ProductImage.Get(u => u.Id == imageId);
+            var productId = imageToBeDeleted.ProductId;
+            if (imageToBeDeleted != null)
+            {
+                if (!string.IsNullOrEmpty(imageToBeDeleted.ImageUrl))
+                {
+                    var oldImagePath =
+                                Path.Combine(_webhostEnvironment.WebRootPath,
+                                imageToBeDeleted.ImageUrl.TrimStart('\\')); //取得舊圖片的完整路徑
+                    if (System.IO.File.Exists(oldImagePath)) //如果舊圖片存在，刪除它
+                    {
+                        System.IO.File.Delete(oldImagePath);
+                    }
+                }
+                _unitOfWork.ProductImage.Remove(imageToBeDeleted);
+                _unitOfWork.Save(); 
+
+                TempData["success"] = "Image deleted successfully"; //記錄這個動作成功
+            }
+            return RedirectToAction(nameof(Upsert), new { id = productId });
+        }       
 
         #region API CALLS
         [HttpGet]
