@@ -1,12 +1,12 @@
 # Bulky Book - E-Commerce Web App (.NET 8)
 
-以 ASP.NET Core `.NET 8` 開發的電商網站，重點展示後端能力：身分驗證/授權、EF Core 資料建模、Repository + Unit of Work、購物車/訂單流程、Session 狀態管理，以及 Stripe Checkout 金流串接。
+以 ASP.NET Core `.NET 8` 開發的電商網站，重點展示後端能力：身分驗證/授權、EF Core 資料建模、購物車/訂單流程、Session 狀態管理，以及 Stripe Checkout 金流串接。
 
 > 本專案為地端作品集專案（未部署）。
 
 ## Links
 - GitHub: https://github.com/wuyaochen/Bulky_MVC
-- Demo Video: （可放 YouTube / Google Drive 連結）
+- Demo Video:
 
 ---
 
@@ -119,27 +119,3 @@ Seeded Admin（`Bulky.DataAccess/DbInitializer/DbInitializer.cs`）：
 
 > 若不需要金流示範，可不填 `SecretKey`，其餘功能仍可展示（商品/購物車/訂單/後台/權限等）。
 
----
-
-## Demo (建議放在 GitHub README)
-
-### Screenshots
-建議將圖片放在：
-- `docs/images/`
-
-建議至少放這些截圖（僅 Home 不足以展示流程）：
-1. Home / Product List
-2. Product Details
-3. Cart
-4. Checkout Summary
-5. Order Confirmation
-6. Admin - Order Details/Management
-7. Admin - User Role Management
-
-範例：
-
-```markdown
-![Home](docs/images/home.png)
-![Cart](docs/images/cart.png)
-![Admin - Order Details](docs/images/admin-order-details.png)
-```
