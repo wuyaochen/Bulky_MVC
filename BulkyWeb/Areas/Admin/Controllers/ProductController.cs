@@ -50,46 +50,59 @@ namespace BulkyWeb.Areas.Admin.Controllers
             }
         }
         [HttpPost]
-        public IActionResult Upsert(ProductVM productVM, IFormFile? file)
+        public IActionResult Upsert(ProductVM productVM, List<IFormFile> files)
         {
+            if (productVM.Product.Id == 0)
+            {
+                _unitOfWork.Product.Add(productVM.Product); //表單按下送出後，將資料加入資料庫
+            }
+            else
+            {
+                _unitOfWork.Product.Update(productVM.Product);
+            }
+
+            _unitOfWork.Save(); //save changes to database
+
             if (ModelState.IsValid)
             {
                 string wwwRootPath = _webhostEnvironment.WebRootPath;
-                if (file != null)
+                if (files != null)
                 {
-                    string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName); //產生一個獨特的檔案名稱
-                    var productPath = Path.Combine(wwwRootPath, @"images\product"); //設定上傳路徑
+                    foreach (IFormFile file in files)
+                    {
+                        string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName); //產生一個獨特的檔案名稱
+                        string productPath = @"images\products\product-" + productVM.Product.Id;
+                        string finalPath = Path.Combine(wwwRootPath, productPath); //設定上傳路徑
 
-                    //if (!string.IsNullOrEmpty(productVM.Product.ImageUrl)) //如果產品已經有圖片了，刪除舊圖片
-                    //{
-                    //    // delete old image
-                    //    var oldImagePath = 
-                    //        Path.Combine(wwwRootPath, productVM.Product.ImageUrl.TrimStart('\\')); //取得舊圖片的完整路徑
-                    //    if (System.IO.File.Exists(oldImagePath)) //如果舊圖片存在，刪除它
-                    //    {
-                    //        System.IO.File.Delete(oldImagePath);
-                    //    }
-                    //}
+                        if (!Directory.Exists(finalPath))
+                        {
+                            Directory.CreateDirectory(finalPath);
+                        }
 
+                        using (var fileStream = new FileStream(Path.Combine(finalPath, fileName), FileMode.Create)) //建立一個新的檔案流，準備將新圖片寫入
+                        {
+                            file.CopyTo(fileStream); //將新圖片上傳到指定路徑
+                        }
 
-                    //using (var fileStream = new FileStream(Path.Combine(productPath, fileName), FileMode.Create)) //建立一個新的檔案流，準備將新圖片寫入
-                    //{
-                    //    file.CopyTo(fileStream); //將新圖片上傳到指定路徑
-                    //}
-                    //productVM.Product.ImageUrl = @"\images\product\" + fileName; //更新產品的圖片URL
+                        ProductImage productImage = new()
+                        {
+                            ImageUrl = @"\" + productPath + @"\" + fileName,
+                            ProductId = productVM.Product.Id,
+                        };
+
+                        if (productVM.Product.ProductImages == null)
+                        {
+                            productVM.Product.ProductImages = new List<ProductImage>();
+                        }
+
+                        productVM.Product.ProductImages.Add(productImage);   
+                    }
+
+                    _unitOfWork.Product.Update(productVM.Product);
+                    _unitOfWork.Save();
                 }
 
-                if (productVM.Product.Id == 0)
-                {
-                    _unitOfWork.Product.Add(productVM.Product); //表單按下送出後，將資料加入資料庫
-                }
-                else
-                {
-                    _unitOfWork.Product.Update(productVM.Product); 
-                }
-
-                _unitOfWork.Save(); //save changes to database
-                TempData["success"] = "Product created successfully"; //記錄這個動作成功
+                TempData["success"] = "Product created/updated successfully"; //記錄這個動作成功
                 return RedirectToAction("Index");
             }
             else
