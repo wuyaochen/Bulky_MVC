@@ -6,6 +6,8 @@ using Bulky.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Stripe;
+using Product = Bulky.Models.Product;
 
 namespace BulkyWeb.Areas.Admin.Controllers
 {
@@ -160,13 +162,18 @@ namespace BulkyWeb.Areas.Admin.Controllers
                 return Json(new { success = false, message = "Error while deleting" });
             }
 
-                //var oldImagePath =
-                //            Path.Combine(_webhostEnvironment.WebRootPath,
-                //            productToBeDeleted.ImageUrl.TrimStart('\\')); //取得舊圖片的完整路徑
-                //if (System.IO.File.Exists(oldImagePath)) //如果舊圖片存在，刪除它
-                //{
-                //    System.IO.File.Delete(oldImagePath);
-                //}
+            string productPath = @"images\products\product-" + id;
+            string finalPath = Path.Combine(_webhostEnvironment.WebRootPath, productPath); //設定上傳路徑
+
+            if (Directory.Exists(finalPath))
+            {
+                string[] filePaths = Directory.GetFiles(finalPath);
+                foreach (string filePath in filePaths)
+                {
+                    System.IO.File.Delete(filePath);
+                }
+                Directory.Delete(finalPath);
+            }
 
             _unitOfWork.Product.Remove(productToBeDeleted);
             _unitOfWork.Save(); //save changes to database
