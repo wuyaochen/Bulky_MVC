@@ -10,6 +10,25 @@
 
 ---
 
+## Security / Demo Notes（重要）
+本專案主要用途為 **面試展示/練習 .NET 工具鏈與架構**，不作為正式上線產品使用。
+
+- **不包含任何有效的 Secrets/金鑰**
+  - Repo 內不提交 Stripe `SecretKey`、第三方 OAuth `client secret`、SMTP 密碼等敏感資訊。
+  - 第三方登入設定若曾出現過舊憑證，也已重設（舊值已無效）。
+- **若需啟用金流/第三方登入**
+  - 請以本機環境設定（User Secrets / 環境變數）注入設定值，不要提交到 Git。
+- **XSS（跨站腳本）風險說明**
+  - 專案中部分頁面為了展示「富文字商品描述」會使用 `Html.Raw(...)` 直接輸出 HTML。
+  - 這在正式環境可能造成 Stored XSS。若要上線，建議：
+    - 對富文字輸入做 HTML Sanitization（白名單允許的標籤/屬性）
+    - 搭配設定 CSP（Content-Security-Policy）等安全標頭，降低注入腳本的影響面
+- **Seeded Admin**
+  - 本專案啟動時可能建立預設角色與 Admin 帳號（僅供本機/示範用途）。
+  - 正式環境不建議將任何帳密輸出到 log，應改為以安全的初始流程（環境變數、一次性邀請、強制改密碼等）處理。
+
+---
+
 ## Tech Stack	
 
 - **Backend**: C#, ASP.NET Core (MVC + Areas), Razor Pages (Identity UI)
@@ -106,7 +125,7 @@ Seeded Admin（`Bulky.DataAccess/DbInitializer/DbInitializer.cs`）：
 - Email/UserName：`admin@gmail.com`
 - Password：首次初始化時隨機產生，並輸出到應用程式 log（僅供本機開發使用）
 
-> 若要公開 repo，建議改掉 seeded 密碼或移除 seeded admin。
+> 若要公開 repo，建議改掉 seeded 密碼或移除 seeded admin。 
 
 ---
 
@@ -118,4 +137,3 @@ Seeded Admin（`Bulky.DataAccess/DbInitializer/DbInitializer.cs`）：
 - `Stripe:PublishableKey`
 
 > 若不需要金流示範，可不填 `SecretKey`，其餘功能仍可展示（商品/購物車/訂單/後台/權限等）。
-
